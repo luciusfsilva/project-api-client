@@ -17,7 +17,7 @@ import com.dominio.ms_cliente.domain.model.Cliente;
 import com.dominio.ms_cliente.domain.service.impl.ClienteServiceImpl;
 
 @RestController
-@RequestMapping("/ms-cliente")
+@RequestMapping("/ms-cliente/api/vi/cliente")
 public class ClienteController {
 	
 	private final ClienteServiceImpl clienteService;

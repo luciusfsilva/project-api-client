@@ -38,6 +38,11 @@ public class ClienteServiceImpl implements ClienteService, ModelService<Cliente>
 		if (Objects.isNull(cliente)) {
 			throw new IllegalArgumentException("Cliente cannot be null");
 		}
+		Cliente existingCliente = clienteRepository.findByCpf(cliente.getCpf())
+				.orElseThrow(() -> new IllegalArgumentException("Cliente with CPF already exists: " + cliente.getCpf()));
+		if (existingCliente != null) {
+			throw new IllegalArgumentException("Cliente with CPF already exists: " + cliente.getCpf());
+		}
 		Cliente clienteSaved = clienteRepository.save(cliente);
 		transacaoMsClienteImpl.saveLog("save");
 		return clienteSaved;
