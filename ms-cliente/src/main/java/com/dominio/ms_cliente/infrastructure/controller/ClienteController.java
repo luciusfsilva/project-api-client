@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dominio.ms_cliente.domain.model.Cliente;
 import com.dominio.ms_cliente.domain.service.impl.ClienteServiceImpl;
-import com.dominio.ms_cliente.infrastructure.dto.ClienteDTO;
 
 @RestController
 @RequestMapping("/ms-cliente")
@@ -32,9 +31,9 @@ public class ClienteController {
 		return ResponseEntity.ok(clienteService.save(cliente));
 	}
 	
-	@PatchMapping("/update")
-	public ResponseEntity<?> updateCliente(@RequestBody Cliente cliente) {
-		return ResponseEntity.ok(clienteService.update(cliente));
+	@PatchMapping("/update/{Id}")
+	public ResponseEntity<?> updateCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
+		return ResponseEntity.ok(clienteService.update(id, cliente));
 	}
 	
 	@DeleteMapping("/delete/{id}")
@@ -45,17 +44,17 @@ public class ClienteController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id) {
-		ClienteDTO clienteDTO = clienteService.findById(id);
-		if (clienteDTO == null) {
+		Cliente cliente = clienteService.findById(id);
+		if (cliente == null) {
 			return ResponseEntity.notFound().build();
 		}
 		
-		return ResponseEntity.ok(clienteDTO);
+		return ResponseEntity.ok(cliente);
 	}
 	
 	@GetMapping("/findAll")
 	public ResponseEntity<?> findAll() {
-		List<ClienteDTO> clientes = clienteService.findAll();
+		List<Cliente> clientes = clienteService.findAll();
 		if (clientes.isEmpty()) {
 			return ResponseEntity.noContent().build();
 		}

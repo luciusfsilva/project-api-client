@@ -2,8 +2,10 @@ package com.dominio.ms_cliente.domain.service.impl;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -17,70 +19,74 @@ import com.dominio.ms_cliente.infrastructure.dto.ClienteMapper;
 import com.dominio.ms_cliente.infrastructure.repository.ClienteRepository;
 
 @Service
-public class ClienteServiceImpl implements ClienteService {
+public class ClienteServiceImpl implements ClienteService, ModelService<Cliente> {
 	
-	private final ModelService<Cliente> modelService;
-	private final ClienteRepository clienteRepository;
-	private final ClienteMapper clienteMapper;
-	private final LogMsClienteServiceImp transacaoMsClienteImpl;
+	private ClienteRepository clienteRepository;
+	private ClienteMapper clienteMapper;
+	private LogMsClienteServiceImp transacaoMsClienteImpl;
 	
-	public ClienteServiceImpl(ModelService<Cliente> modelService, ClienteRepository clienteRepository, 
+	public ClienteServiceImpl(ClienteRepository clienteRepository, 
 			ClienteMapper clienteMapper, LogMsClienteServiceImp transacaoMsClienteImpl) {
-		this.modelService = modelService;
 		this.clienteRepository = clienteRepository;
 		this.clienteMapper = clienteMapper;
 		this.transacaoMsClienteImpl = transacaoMsClienteImpl;
 	}
 	
+	@Override
 	@TransacaoMsCliente(transacao = TransacaoEnum.SAVE)
-	public ClienteDTO save(Cliente cliente) {
+	public Cliente save(Cliente cliente) {
 		if (Objects.isNull(cliente)) {
 			throw new IllegalArgumentException("Cliente cannot be null");
 		}
-		Cliente clienteSaved = modelService.save(cliente);
+		Cliente clienteSaved = clienteRepository.save(cliente);
 		transacaoMsClienteImpl.saveLog("save");
-		return clienteMapper.toDTO(clienteSaved);
+		return clienteSaved;
 	}
 	
+	@Override
 	@TransacaoMsCliente(transacao = TransacaoEnum.UPDATE)
-	public ClienteDTO update(Cliente cliente) {
-		if (Objects.isNull(cliente) || Objects.isNull(cliente.getId())) {
+	public Cliente update(Long id, Cliente cliente) {
+		if (Objects.isNull(cliente) && Objects.isNull(id)) {
 			throw new IllegalArgumentException("Cliente or Cliente ID cannot be null");
 		}
 		transacaoMsClienteImpl.saveLog("update");
-		Cliente clienteUpdated = modelService.save(cliente);
-		return clienteMapper.toDTO(clienteUpdated);
+		Cliente existingCliente = clienteRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Cliente not found with ID: " + id));
+		BeanUtils.copyProperties(cliente, existingCliente, "id");
+		Cliente clienteUpdated = clienteRepository.save(existingCliente);
+		return clienteUpdated;
 	}
 	
+	@Override
 	@TransacaoMsCliente(transacao = TransacaoEnum.DELETE)
 	public void delete(Long id) {
 		if (Objects.isNull(id)) {
 			throw new IllegalArgumentException("ID cannot be null");
 		}
 		transacaoMsClienteImpl.saveLog("delete");
-		modelService.delete(id);
+		clienteRepository.deleteById(id);
 	}
 	
+	@Override
 	@TransacaoMsCliente(transacao = TransacaoEnum.FIND_BY_ID)
-	public ClienteDTO findById(Long id) {
+	public Cliente findById(Long id) {
 		if (Objects.isNull(id)) {
 			throw new IllegalArgumentException("ID cannot be null");
 		}
-		Cliente cliente = modelService.findById(id);
+		Optional<Cliente> cliente = clienteRepository.findById(id);
 		transacaoMsClienteImpl.saveLog("findById");
-		return clienteMapper.toDTO(cliente);
+		return cliente.orElseThrow(() -> new IllegalArgumentException("Cliente not found with ID: " + id));
 	}
 	
+	@Override
 	@TransacaoMsCliente(transacao = TransacaoEnum.FIND_ALL)
-	public List<ClienteDTO> findAll() {
+	public List<Cliente> findAll() {
 		transacaoMsClienteImpl.saveLog("findAll");
-		return modelService.findAll().stream()
-				.map(clienteMapper::toDTO)
-				.toList();
+		return clienteRepository.findAll();
 	}
 
-	@TransacaoMsCliente(transacao = TransacaoEnum.PAGEBLE)
 	@Override
+	@TransacaoMsCliente(transacao = TransacaoEnum.PAGEBLE)
 	public List<ClienteDTO> findAll(Pageable pageable) {
 		transacaoMsClienteImpl.saveLog("findAll with Pageable");
 		return clienteRepository.findAll(pageable).stream()
