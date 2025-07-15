@@ -17,7 +17,7 @@ import com.dominio.ms_cliente.domain.model.Cliente;
 import com.dominio.ms_cliente.domain.service.impl.ClienteServiceImpl;
 
 @RestController
-@RequestMapping("/ms-cliente/api/vi/cliente")
+@RequestMapping("/ms-cliente/api/v1/cliente")
 public class ClienteController {
 	
 	private final ClienteServiceImpl clienteService;
@@ -31,7 +31,7 @@ public class ClienteController {
 		return ResponseEntity.ok(clienteService.save(cliente));
 	}
 	
-	@PatchMapping("/update/{Id}")
+	@PatchMapping("/update/{id}")
 	public ResponseEntity<?> updateCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
 		return ResponseEntity.ok(clienteService.update(id, cliente));
 	}

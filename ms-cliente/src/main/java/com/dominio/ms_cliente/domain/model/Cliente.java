@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -51,6 +52,16 @@ public class Cliente {
 	public void prePersist() {
 		this.dataCadastro = LocalDate.now();
 		this.ativo = true;
+	}
+	
+	@PreUpdate
+	public void preUpdate() {
+		if (this.dataCadastro == null) {
+			this.dataCadastro = LocalDate.now();
+		}
+		if (this.ativo == null) {
+			this.ativo = true;
+		}
 	}
 
 }
