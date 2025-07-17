@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: ms-pedido
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        max-page-size: 100
+server:
+  port: 8100
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+      
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    operations-sorter: method
+
+spring.datasource:
+  url: jdbc:postgresql://localhost:5432/ms_pedido_db
+  username: root
+  password:   root_password
+  driver-class-name: org.postgresql.Driver
+  hikari:
+    maximum-pool-size: 10
