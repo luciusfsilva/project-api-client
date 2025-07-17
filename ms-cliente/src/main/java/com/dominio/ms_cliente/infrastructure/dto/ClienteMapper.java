@@ -10,7 +10,6 @@ public interface ClienteMapper {
 	
 	ClienteDTO toDTO(Cliente cliente);
 	
-	
 	@Mapping(target = "id", ignore = true)
     @Mapping(target = "cpf", ignore = true)
     @Mapping(target = "ativo", ignore = true)

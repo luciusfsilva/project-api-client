@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,7 @@ import com.dominio.ms_pedido.domain.model.Pedido;
 import com.dominio.ms_pedido.domain.service.PedidoService;
 
 @RestController
-@RequestMapping("/ms-pedidos/v1/pedido")
+@RequestMapping("/ms-pedido/api/v1/pedido")
 public class PedidoController {
 	
 	private final PedidoService pedidoService;
@@ -36,7 +37,7 @@ public class PedidoController {
 		return ResponseEntity.ok(pedidoService.update(pedido.getId(), pedido));
 	}
 	
-	@PutMapping("/delete/{Id}")
+	@DeleteMapping("/delete/{Id}")
 	public ResponseEntity<?> delete(@PathVariable UUID Id) {
 		pedidoService.delete(Id);
 		return ResponseEntity.noContent().build();

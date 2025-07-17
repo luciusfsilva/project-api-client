@@ -8,6 +8,7 @@ import java.util.UUID;
 import com.dominio.ms_pedido.domain.enums.StatusPedidoEnum;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
@@ -33,10 +34,13 @@ public class Pedido {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
 	
+	@Column(name = "cliente_id", nullable = false)
 	private UUID clienteId;
 	
+	@Column(name = "total", nullable = false, precision = 10, scale = 2)
 	private BigDecimal total;
 	
+	@Column(name = "data_hora", nullable = false)
 	private LocalDateTime dataHora;
 	
 	@Enumerated
@@ -45,8 +49,7 @@ public class Pedido {
 	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ItemPedido> itens;
 	
-	@PrePersist
-	private void prePersist() {
+	@PrePersist void prePersist() {
 		this.dataHora = LocalDateTime.now();
 		if (this.status == null) {
 			this.status = StatusPedidoEnum.PENDENTE;
