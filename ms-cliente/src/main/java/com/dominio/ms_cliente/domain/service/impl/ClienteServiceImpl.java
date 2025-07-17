@@ -14,14 +14,13 @@ import com.dominio.ms_cliente.domain.enums.TransacaoEnum;
 import com.dominio.ms_cliente.domain.model.Cliente;
 import com.dominio.ms_cliente.domain.service.ClienteService;
 import com.dominio.ms_cliente.domain.service.LogMsClienteService;
-import com.dominio.ms_cliente.domain.service.ModelService;
 import com.dominio.ms_cliente.domain.service.annotations.TransacaoMsCliente;
 import com.dominio.ms_cliente.infrastructure.dto.ClienteDTO;
 import com.dominio.ms_cliente.infrastructure.dto.ClienteMapper;
 import com.dominio.ms_cliente.infrastructure.repository.ClienteRepository;
 
 @Service
-public class ClienteServiceImpl implements ClienteService, ModelService<Cliente> {
+public class ClienteServiceImpl implements ClienteService {
 	
 	private ClienteRepository clienteRepository;
 	private ClienteMapper clienteMapper;

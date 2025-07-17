@@ -25,13 +25,11 @@ public class LogMsClienteServiceImp implements LogMsClienteService {
 	@Override
 	@Transactional
 	public void saveLog(TransacaoEnum transacao) {
-		try {
+		if (transacao == null) {
+			throw new IllegalArgumentException("Transacao cannot be null");
+		}
 			LogMsCliente log = LogMsCliente.builder().dataHora(LocalDateTime.now())
 					.transacao(transacao.name()).build();
 			logMsClienteRepository.save(log);
-		} catch (Throwable e) {
-			e.printStackTrace();
-			log.severe("Error during transaction: " + e.getMessage());
-		}
 	}
 }

@@ -19,6 +19,16 @@ spring:
 server:
   port: 8099
 
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+      
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    operations-sorter: method
+
 spring.datasource:
   url: jdbc:postgresql://localhost:5432/ms_cliente_db
   username: root
