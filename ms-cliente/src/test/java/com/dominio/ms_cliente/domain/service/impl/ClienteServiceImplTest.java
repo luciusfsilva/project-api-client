@@ -1,6 +1,7 @@
 package com.dominio.ms_cliente.domain.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -79,6 +80,8 @@ public class ClienteServiceImplTest {
 				.endereco(endereco)
 				.dataCadastro(LocalDate.now())
 				.ativo(true)
+				.usuario("carlos123")
+				.senha("senha123")
 				.build();
 		
 		clientes.add(cliente);
@@ -92,7 +95,9 @@ public class ClienteServiceImplTest {
 		when(clienteRepository.save(cliente)).thenReturn(cliente);
 		doNothing().when(transacaoMsCliente).saveLog(TransacaoEnum.SAVE);
 		Cliente resultado = clienteServiceImpl.save(cliente);
+		String senhaCriptografada = clienteServiceImpl.criptografarSenha(resultado.getSenha());
 		assertNotNull(resultado);
+		assertNotEquals(senhaCriptografada, resultado.getSenha());
 		assertEquals(cliente.getId(), resultado.getId());
 		verify(clienteRepository, times(1)).save(cliente);
 		verify(transacaoMsCliente, times(1)).saveLog(TransacaoEnum.SAVE);
@@ -227,5 +232,12 @@ public class ClienteServiceImplTest {
 	    verify(clienteRepository, times(1)).findAll(pageable);
 	    verify(clienteMapper, times(1)).toDTO(any(Cliente.class));
 	    verify(transacaoMsCliente, times(1)).saveLog(TransacaoEnum.PAGEBLE);
+	}
+	
+	@Test
+	public void testCriptografarSenha() {
+		String senha = "senha123";
+		String resultado = clienteServiceImpl.criptografarSenha(senha);
+		assertNotNull(resultado); // Aqui você deve usar o método real de criptografia
 	}
 }
