@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "ms.cliente.url",
+  "type": "java.lang.String",
+  "description": "A description for 'ms.cliente.url'"
+}]}

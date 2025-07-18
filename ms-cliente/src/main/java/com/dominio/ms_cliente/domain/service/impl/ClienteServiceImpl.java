@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +45,7 @@ public class ClienteServiceImpl implements ClienteService {
 		if (existingCliente != null) {
 			throw new IllegalArgumentException("Cliente with CPF already exists: " + cliente.getCpf());
 		}
+		cliente.setSenha(criptografarSenha(cliente.getSenha()));
 		Cliente clienteSaved = clienteRepository.save(cliente);
 		transacaoMsCliente.saveLog(TransacaoEnum.SAVE);
 		return clienteSaved;
@@ -99,6 +101,15 @@ public class ClienteServiceImpl implements ClienteService {
 		return clienteRepository.findAll(pageable).stream()
 				.map(clienteMapper::toDTO)
 				.collect(Collectors.toUnmodifiableList());
+	}
+
+	@Override
+	public String criptografarSenha(String senha) {
+		if (senha == null || senha.isEmpty()) {
+			throw new IllegalArgumentException("Senha cannot be null or empty");
+		}
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		return passwordEncoder.encode(senha);
 	}
 
 }

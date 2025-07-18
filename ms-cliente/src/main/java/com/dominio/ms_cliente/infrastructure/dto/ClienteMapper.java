@@ -14,6 +14,8 @@ public interface ClienteMapper {
     @Mapping(target = "cpf", ignore = true)
     @Mapping(target = "ativo", ignore = true)
     @Mapping(target = "dataCadastro", ignore = true)
+	@Mapping(target = "usuario", ignore = true)
+	@Mapping(target = "senha", ignore = true)
 	Cliente toModel(ClienteDTO clienteDTO);
 
 }

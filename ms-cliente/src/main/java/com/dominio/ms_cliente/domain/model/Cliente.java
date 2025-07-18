@@ -2,6 +2,8 @@ package com.dominio.ms_cliente.domain.model;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -47,6 +49,13 @@ public class Cliente {
 	
 	@Column(name = "ativo", nullable = false)
 	private Boolean ativo;
+	
+	@Column(name = "usuario", nullable = false, length = 10)
+	private String usuario;
+	
+	@JsonIgnore
+	@Column(name = "senha", nullable = false, length = 8)
+	private String senha;
 	
 	@PrePersist
 	public void prePersist() {

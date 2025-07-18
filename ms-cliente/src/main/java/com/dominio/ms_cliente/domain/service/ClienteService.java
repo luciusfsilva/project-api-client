@@ -10,4 +10,6 @@ import com.dominio.ms_cliente.infrastructure.dto.ClienteDTO;
 public interface ClienteService extends ModelService<Cliente> {
 
 	public List<ClienteDTO> findAll(Pageable pageable);
+	
+	public String criptografarSenha(String senha);
 }

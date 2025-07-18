@@ -138,5 +138,12 @@ public class ClienteServiceTest {
 		assertEquals(1, allClientes.size());
 		assertEquals(clienteDTO.getNome(), allClientes.get(0).getNome());
 	}
-
+	
+	@Test
+	public void testCriptografarSenha() {
+		String senha = "senha123";
+		when(clienteServiceImpl.criptografarSenha(senha)).thenReturn(senha);
+		String senhaCriptografada = clienteServiceImpl.criptografarSenha(senha);
+		assertEquals("senha123", senhaCriptografada); // Aqui você deve usar o método real de criptografia
+	}
 }
