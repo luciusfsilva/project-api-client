@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class PedidoDTO {
 	
 	private UUID id;
-	private UUID clienteId;
+	private Long clienteId;
 	private BigDecimal total;
 	private LocalDateTime dataHora;
 	private StatusPedidoEnum status;

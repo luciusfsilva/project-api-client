@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.dominio.ms_pedido.domain.enums.StatusPedidoEnum;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -35,7 +36,10 @@ public class Pedido {
 	private UUID id;
 	
 	@Column(name = "cliente_id", nullable = false)
-	private UUID clienteId;
+	private Long clienteId;
+	
+	@Column(name = "cpf_cliente", nullable = false, length = 11)
+	private String cpfCliente;
 	
 	@Column(name = "total", nullable = false, precision = 10, scale = 2)
 	private BigDecimal total;
@@ -46,6 +50,7 @@ public class Pedido {
 	@Enumerated
 	private StatusPedidoEnum status;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ItemPedido> itens;
 	

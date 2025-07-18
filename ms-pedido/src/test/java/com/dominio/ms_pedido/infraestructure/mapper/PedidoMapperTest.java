@@ -21,7 +21,7 @@ public class PedidoMapperTest {
 	public void testToPedido() {
 		PedidoDTO pedidoDTO = PedidoDTO.builder()
 				.id(UUID.randomUUID())
-				.clienteId(UUID.randomUUID())
+				.clienteId(1L)
 				.total(new BigDecimal("100.0"))
 				.status(StatusPedidoEnum.PENDENTE)
 				.build();
@@ -39,7 +39,7 @@ public class PedidoMapperTest {
 	public void testToPedidoDTO() {
 		Pedido pedido = Pedido.builder()
 				.id(UUID.randomUUID())
-				.clienteId(UUID.randomUUID())
+				.clienteId(1L)
 				.total(new BigDecimal("100.0"))
 				.status(StatusPedidoEnum.PENDENTE)
 				.build();

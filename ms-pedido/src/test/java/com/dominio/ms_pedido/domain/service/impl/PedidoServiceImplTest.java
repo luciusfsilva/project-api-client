@@ -46,7 +46,7 @@ public class PedidoServiceImplTest {
 		
 		pedido = Pedido.builder()
 				.id(UUID.randomUUID())
-				.clienteId(UUID.randomUUID())
+				.clienteId(1L)
 				.dataHora(LocalDateTime.now())
 				.total(new BigDecimal("100.00"))
 				.status(StatusPedidoEnum.PENDENTE)

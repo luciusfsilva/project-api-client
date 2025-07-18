@@ -3,6 +3,8 @@ package com.dominio.ms_pedido.domain.model;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -28,16 +30,19 @@ public class ItemPedido {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
 	
+	@JsonBackReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pedido_id", nullable = false)
 	private Pedido pedido;
 	
 	private UUID produtoId;
 	
+	private Integer quantidade;
+	
 	private String descricao;
 	
 	private BigDecimal precoUnitario;
 	
-	private Integer quantidade;
+	
 
 }

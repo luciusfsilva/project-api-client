@@ -70,7 +70,7 @@ public class PedidoControllerTest {
 		
 		pedido = Pedido.builder()
 				.id(UUID.randomUUID())
-				.clienteId(UUID.randomUUID())
+				.clienteId(1L)
 				.total(new BigDecimal(100.0))
 				.status(StatusPedidoEnum.PENDENTE)
 				.dataHora(LocalDateTime.now())

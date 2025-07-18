@@ -36,3 +36,7 @@ spring.datasource:
   driver-class-name: org.postgresql.Driver
   hikari:
     maximum-pool-size: 10
+#Comunicação com a API ms-cliente
+ms:
+  cliente:
+    url: http://localhost:8099

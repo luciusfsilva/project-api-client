@@ -9,26 +9,41 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import com.dominio.ms_pedido.domain.enums.TransacaoEnum;
+import com.dominio.ms_pedido.domain.model.ItemPedido;
 import com.dominio.ms_pedido.domain.model.Pedido;
 import com.dominio.ms_pedido.domain.service.LogMsPedidoService;
 import com.dominio.ms_pedido.domain.service.PedidoService;
 import com.dominio.ms_pedido.infrastructure.repository.PedidoRepository;
+import com.dominio.ms_pedido.web.api.ClienteServiceApi;
+import com.dominio.ms_pedido.web.api.model.ClienteResponse;
 
 @Service
 public class PedidoServiceImpl implements PedidoService {
 	
 	private final PedidoRepository pedidoRepository;
 	private final LogMsPedidoService logMsPedidoService;
+	private final ClienteServiceApi clienteServiceApi;
 	
-	public PedidoServiceImpl(PedidoRepository pedidoRepository, LogMsPedidoService logMsPedidoService) {
+	public PedidoServiceImpl(PedidoRepository pedidoRepository, LogMsPedidoService logMsPedidoService, 
+			ClienteServiceApi clienteServiceApi) {
 		this.pedidoRepository = pedidoRepository;
 		this.logMsPedidoService = logMsPedidoService;
+		this.clienteServiceApi = clienteServiceApi;
 	}
 
 	@Override
 	public Pedido save(Pedido pedido) {
 		if (ObjectUtils.isEmpty(pedido)) {
 			throw new IllegalArgumentException("Pedido cannot be null");
+		}
+		String cpf = findClienteById(pedido.getClienteId()).getCpf();
+		pedido.setCpfCliente(cpf);
+		if (pedido.getItens().isEmpty()) {
+			throw new IllegalArgumentException("Pedido must have at least one item");
+		} else {
+			for (ItemPedido item : pedido.getItens()) {
+				item.setPedido(pedido);
+			}
 		}
 		logMsPedidoService.saveLog(TransacaoEnum.SAVE);
 		return pedidoRepository.save(pedido);
@@ -73,6 +88,15 @@ public class PedidoServiceImpl implements PedidoService {
 		List<Pedido> pedidos = pedidoRepository.findAll();
 		logMsPedidoService.saveLog(TransacaoEnum.FIND_ALL);
 		return pedidos != null ? pedidos : new ArrayList<>();
+	}
+	
+	public ClienteResponse findClienteById(Long id) {
+		ClienteResponse clienteResponse = clienteServiceApi.consultarClientePorId(id);
+		if (ObjectUtils.isEmpty(clienteResponse)) {
+			throw new IllegalArgumentException("Cliente not found");
+		}
+		logMsPedidoService.saveLog(TransacaoEnum.FIND_CLIENTE_BY_ID);
+		return clienteResponse;
 	}
 
 }
