@@ -3,7 +3,6 @@ package com.dominio.ms_pagamento.domain.service.impl;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.dominio.ms_pagamento.domain.service.BaseModelService;
@@ -13,7 +12,6 @@ import jakarta.transaction.Transactional;
 import lombok.extern.java.Log;
 
 @Log
-@Service
 public class BaseModelServiceImpl<T> implements BaseModelService<T> {
 	
 	private final BaseModelRepository<T, Long> baseModelRepository;
@@ -40,7 +38,7 @@ public class BaseModelServiceImpl<T> implements BaseModelService<T> {
 					log.info("Entity found with id: " + id);
 					return entity;
 				})
-				.orElseThrow(() -> new IllegalArgumentException("Entity not found with id: " + id));
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Entity not found with id: " + id));
 	}
 
 	@Override
@@ -48,7 +46,7 @@ public class BaseModelServiceImpl<T> implements BaseModelService<T> {
 		List<T> entities = baseModelRepository.findAll();
 		if (entities.isEmpty()) {
 			log.warning("No entities found");
-			throw new IllegalArgumentException("No entities found");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No entities found");
 		}
 		return entities;
 	}

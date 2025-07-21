@@ -11,18 +11,16 @@ import com.dominio.ms_pagamento.domain.service.PagamentoLogService;
 import com.dominio.ms_pagamento.infrastructure.repository.PagamentoLogRepository;
 
 @Service
-public class PagamentoLogServiceImpl implements PagamentoLogService {
-
-	private final PagamentoLogRepository pagamentoLogRepository;
+public class PagamentoLogServiceImpl extends BaseModelServiceImpl<PagamentoLog> implements PagamentoLogService {
 
 	public PagamentoLogServiceImpl(PagamentoLogRepository pagamentoLogRepository) {
-		this.pagamentoLogRepository = pagamentoLogRepository;
+		super(pagamentoLogRepository);
 	}
 
 	@Override
 	public void saveLog(TransacaoEnum transacao) {
 		if (Objects.nonNull(transacao)) {
-			pagamentoLogRepository.save(new PagamentoLog(transacao, LocalDateTime.now()));
+			save(new PagamentoLog(transacao, LocalDateTime.now()));
 		} else {
 			throw new IllegalArgumentException("Transação não pode ser nula");
 		}
