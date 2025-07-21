@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -20,14 +21,14 @@ import org.mockito.MockitoAnnotations;
 import com.dominio.ms_pagamento.domain.enums.StatusPagamentoEnum;
 import com.dominio.ms_pagamento.domain.enums.TransacaoEnum;
 import com.dominio.ms_pagamento.domain.model.Pagamento;
-import com.dominio.ms_pagamento.domain.service.BaseModelService;
 import com.dominio.ms_pagamento.domain.service.PagamentoLogService;
+import com.dominio.ms_pagamento.infrastructure.repository.PagamentoRepository;
 
 public class PagamentoServiceImplTest {
 	
 	@Mock
-	private BaseModelService<Pagamento> baseModelService;
-
+    private PagamentoRepository pagamentoRepository;
+	
 	@Mock
 	private PagamentoLogService pagamentoLogService;
 	
@@ -50,29 +51,29 @@ public class PagamentoServiceImplTest {
 	@Test
 	public void testSave() {
 		doNothing().when(pagamentoLogService).saveLog(TransacaoEnum.SAVE);
-		when(baseModelService.save(pagamento)).thenReturn(pagamento);
+		when(pagamentoRepository.save(pagamento)).thenReturn(pagamento);
 		Pagamento savedPagamento = pagamentoServiceImpl.save(pagamento);
 		
 		assertNotNull(savedPagamento);
-		verify(baseModelService, times(1)).save(pagamento);
+		verify(pagamentoRepository, times(1)).save(pagamento);
 	}
 	
 	@Test
 	public void testFindById() {
 		Long id = 1L;
 		doNothing().when(pagamentoLogService).saveLog(TransacaoEnum.FIND_BY_ID);
-		when(baseModelService.findById(id)).thenReturn(pagamento);
+		when(pagamentoRepository.findById(id)).thenReturn(Optional.of(pagamento));
 		Pagamento foundPagamento = pagamentoServiceImpl.findById(id);
 		assertNotNull(foundPagamento);
-		verify(baseModelService, times(1)).findById(id);
+		verify(pagamentoRepository, times(1)).findById(id);
 	}
 	
 	@Test
 	public void testFindAll() {
 		doNothing().when(pagamentoLogService).saveLog(TransacaoEnum.FIND_ALL);
-		when(baseModelService.findAll()).thenReturn(List.of(pagamento));
+		when(pagamentoRepository.findAll()).thenReturn(List.of(pagamento));
 		List<Pagamento> pagamentos = pagamentoServiceImpl.findAll();
 		assertNotNull(pagamentos);
-		verify(baseModelService, times(1)).findAll();
+		verify(pagamentoRepository, times(1)).findAll();
 	}
 }
